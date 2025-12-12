@@ -25,7 +25,7 @@ export default function Login() {
     if (email && password) {
       toast({
         title: "Login realizado",
-        description: "Bem-vindo ao Impetus Ops Hub!",
+        description: "Bem-vindo ao Impetus Hub!",
       })
       router.push("/dashboard")
     } else {
@@ -55,7 +55,7 @@ export default function Login() {
               <Zap className="h-6 w-6 text-primary-foreground" />
             </div>
             <span className="text-2xl font-bold text-primary-foreground">
-              Impetus Ops Hub
+              Impetus Hub
             </span>
           </div>
         </div>
@@ -84,7 +84,7 @@ export default function Login() {
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
               <Zap className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-bold">Impetus Ops Hub</span>
+            <span className="text-xl font-bold">Impetus Hub</span>
           </div>
 
           <div className="flex flex-col gap-2 text-center lg:text-left">

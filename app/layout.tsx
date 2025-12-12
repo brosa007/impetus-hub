@@ -1,7 +1,7 @@
+import { Toaster } from "@/app/_components/ui/sonner";
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/app/_components/ui/sonner";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -9,7 +9,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Impetus Ops Hub",
+  title: "Impetus Hub",
   description: "Central de operações da Impetus",
 };
 
@@ -20,9 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body
-        className={`${montserrat.variable} font-sans antialiased`}
-      >
+      <body className={`${montserrat.variable} font-sans antialiased`}>
         {children}
         <Toaster />
       </body>
