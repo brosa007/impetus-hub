@@ -1,8 +1,8 @@
 "use client";
 
-import { AppTopbar } from "@/app/_components/Layout/AppTopbar";
+import { AppSidebar } from "@/app/_components/AppSiderbar";
+import { AppTopbar } from "@/app/_components/AppTopbar";
 import { createContext, ReactNode, useContext, useState } from "react";
-import { AppSidebar } from "./AppSiderbar";
 
 interface SidebarContextType {
   collapsed: boolean;
