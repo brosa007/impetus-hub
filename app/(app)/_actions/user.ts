@@ -19,16 +19,14 @@ export async function getUser() {
       return null;
     }
 
-    // Buscar dados do perfil na tabela profiles
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("*")
-      .eq("id", user.id)
+      .eq("user_id", user.id)
       .single();
 
     if (profileError) {
       console.error("Error fetching profile:", profileError);
-      // Se não encontrar o perfil, usa dados do auth como fallback
       const userName =
         user.user_metadata?.full_name ||
         user.user_metadata?.name ||
@@ -50,12 +48,7 @@ export async function getUser() {
       };
     }
 
-    // Usar dados do perfil
-    const userName =
-      profile.full_name ||
-      profile.name ||
-      user.email?.split("@")[0] ||
-      "Usuário";
+    const userName = profile.name || "Usuário";
 
     const userInitials = userName
       .split(" ")
