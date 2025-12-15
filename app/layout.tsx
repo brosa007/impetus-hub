@@ -20,7 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={`${montserrat.variable} font-sans antialiased`}>
+      <body
+        className={`${montserrat.variable} font-sans antialiased`}
+        suppressHydrationWarning
+      >
         {children}
         <Toaster />
       </body>
