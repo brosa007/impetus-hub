@@ -139,7 +139,7 @@ export function AppSidebar() {
               <Zap className="text-primary-foreground h-4 w-4" />
             </div>
             <span className="text-sidebar-foreground font-semibold">
-              Impetus Ops
+              Impetus Hub
             </span>
           </Link>
         )}
