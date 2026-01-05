@@ -1,10 +1,11 @@
-import { createServerClient } from "@supabase/ssr"
-import { NextResponse, type NextRequest } from "next/server"
+import { createServerClient } from "@supabase/ssr";
+import { NextResponse, type NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const requestUrl = new URL(request.url)
-  const code = requestUrl.searchParams.get("code")
-  const next = requestUrl.searchParams.get("next") ?? "/dashboard"
+  const requestUrl = new URL(request.url);
+  const code = requestUrl.searchParams.get("code");
+  const type = requestUrl.searchParams.get("type");
+  const next = requestUrl.searchParams.get("next") ?? "/dashboard";
 
   if (code) {
     const supabase = createServerClient(
@@ -13,33 +14,37 @@ export async function GET(request: NextRequest) {
       {
         cookies: {
           getAll() {
-            return request.cookies.getAll()
+            return request.cookies.getAll();
           },
           setAll(cookiesToSet) {
             cookiesToSet.forEach(({ name, value }) =>
-              request.cookies.set(name, value)
-            )
+              request.cookies.set(name, value),
+            );
           },
         },
-      }
-    )
+      },
+    );
 
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
-      const forwardedHost = request.headers.get("x-forwarded-host")
-      const isLocalEnv = process.env.NODE_ENV === "development"
+      const forwardedHost = request.headers.get("x-forwarded-host");
+      const isLocalEnv = process.env.NODE_ENV === "development";
+
+      // Se for um reset de senha, redirecionar para a página de reset
+      const redirectPath = type === "recovery" ? "/reset-password" : next;
 
       if (isLocalEnv) {
-        return NextResponse.redirect(new URL(next, request.url))
+        return NextResponse.redirect(new URL(redirectPath, request.url));
       } else if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}${next}`)
+        return NextResponse.redirect(`https://${forwardedHost}${redirectPath}`);
       } else {
-        return NextResponse.redirect(new URL(next, request.url))
+        return NextResponse.redirect(new URL(redirectPath, request.url));
       }
     }
   }
 
-  return NextResponse.redirect(new URL("/login?error=auth_failed", request.url))
+  return NextResponse.redirect(
+    new URL("/login?error=auth_failed", request.url),
+  );
 }
-

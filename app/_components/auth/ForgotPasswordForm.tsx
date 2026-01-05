@@ -5,17 +5,14 @@ import { Input } from "@/app/_components/ui/input";
 import { Label } from "@/app/_components/ui/label";
 import { toast } from "@/app/_hooks/use-toast";
 import { createClient } from "@/app/_lib/supabase/client";
-import { ArrowRight, Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, ArrowRight, Mail } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export function LoginForm() {
-  const router = useRouter();
+export function ForgotPasswordForm() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,14 +21,13 @@ export function LoginForm() {
     try {
       const supabase = createClient();
 
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
       });
 
       if (error) {
         toast({
-          title: "Erro ao fazer login",
+          title: "Erro ao enviar email",
           description: error.message,
           variant: "destructive",
         });
@@ -39,33 +35,61 @@ export function LoginForm() {
         return;
       }
 
-      if (data.user) {
-        toast({
-          title: "Login realizado",
-          description: "Bem-vindo ao Impetus Hub!",
-        });
-        router.push("/dashboard");
-        router.refresh();
-      }
+      setEmailSent(true);
+      toast({
+        title: "Email enviado",
+        description: "Verifique sua caixa de entrada para redefinir sua senha.",
+      });
     } catch {
       toast({
         title: "Erro inesperado",
-        description: "Ocorreu um erro ao fazer login. Tente novamente.",
+        description: "Ocorreu um erro ao enviar o email. Tente novamente.",
         variant: "destructive",
       });
       setIsLoading(false);
     }
   };
 
+  if (emailSent) {
+    return (
+      <div className="bg-background flex flex-1 items-center justify-center p-8">
+        <div className="flex w-full max-w-md flex-col gap-8">
+          <div className="flex flex-col gap-2 text-center">
+            <div className="bg-primary/10 mx-auto flex h-16 w-16 items-center justify-center rounded-full">
+              <Mail className="text-primary h-8 w-8" />
+            </div>
+            <h2 className="text-2xl font-bold tracking-tight">
+              Email enviado!
+            </h2>
+            <p className="text-muted-foreground">
+              Enviamos um link de redefinição de senha para{" "}
+              <span className="font-semibold">{email}</span>. Verifique sua
+              caixa de entrada e siga as instruções.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-3">
+            <Button asChild variant="outline" className="h-11 w-full">
+              <Link href="/login">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Voltar para o login
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-background flex flex-1 items-center justify-center p-8">
       <div className="flex w-full max-w-md flex-col gap-8">
         <div className="flex flex-col gap-2 text-center lg:text-left">
           <h2 className="text-2xl font-bold tracking-tight">
-            Acesso ao sistema
+            Esqueci minha senha
           </h2>
           <p className="text-muted-foreground">
-            Faça login com suas credenciais corporativas
+            Digite seu email e enviaremos um link para redefinir sua senha
           </p>
         </div>
 
@@ -81,53 +105,19 @@ export function LoginForm() {
                 setEmail(e.target.value)
               }
               className="h-11"
+              required
             />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="password">Senha</Label>
-              <Link
-                href="/forgot-password"
-                className="text-primary text-sm hover:underline"
-              >
-                Esqueci minha senha
-              </Link>
-            </div>
-            <div className="relative">
-              <Input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="••••••••"
-                value={password}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setPassword(e.target.value)
-                }
-                className="h-11 pr-10"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2 transition-colors"
-              >
-                {showPassword ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
-              </button>
-            </div>
           </div>
 
           <Button type="submit" className="h-11 w-full" disabled={isLoading}>
             {isLoading ? (
               <div className="flex items-center gap-2">
                 <div className="border-primary-foreground/30 border-t-primary-foreground h-4 w-4 animate-spin rounded-full border-2" />
-                Entrando...
+                Enviando...
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                Entrar
+                Enviar link de redefinição
                 <ArrowRight className="h-4 w-4" />
               </div>
             )}
@@ -135,12 +125,12 @@ export function LoginForm() {
         </form>
 
         <p className="text-muted-foreground text-center text-sm">
-          Não tem uma conta?{" "}
+          Lembrou sua senha?{" "}
           <Link
-            href="/signup"
+            href="/login"
             className="text-primary cursor-pointer hover:underline"
           >
-            Criar conta
+            Voltar para o login
           </Link>
         </p>
       </div>
