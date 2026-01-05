@@ -67,8 +67,8 @@ export default function Automations() {
             <h1 className="text-3xl font-bold tracking-tight">Automations</h1>
           </div>
           <p className="text-muted-foreground mt-2">
-            Dispare fluxos no n8n sem depender do time técnico. Padronização
-            total com um clique.
+            Agilize suas operações com as nossas automações. Padronização total
+            com um clique.
           </p>
         </div>
       </div>

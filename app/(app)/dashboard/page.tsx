@@ -40,8 +40,8 @@ interface HubModule {
 const modules: HubModule[] = [
   {
     id: "automations",
-    title: "Automations",
-    description: "Dispare fluxos no n8n sem depender do time técnico",
+    title: "Automações",
+    description: "Agilize suas operações com as nossas automações",
     icon: Zap,
     status: "active",
     href: "/automations",
@@ -49,28 +49,29 @@ const modules: HubModule[] = [
   {
     id: "ai-creators",
     title: "AI Creators",
-    description: "Ferramentas de IA para criação de conteúdo",
+    description: "Crie conteúdo de forma automática com IA",
     icon: Sparkles,
     status: "maintenance",
   },
   {
     id: "backend",
     title: "Backend",
-    description: "Gerenciamento de APIs e integrações",
+    description: "Gerencie suas operações com o nosso backend",
     icon: Server,
     status: "maintenance",
   },
   {
     id: "audiovisual",
     title: "Audio Visual",
-    description: "Produção e edição de vídeos",
+    description:
+      "Receba um auxílio para produzir vídeos de forma automática com IA",
     icon: Video,
     status: "maintenance",
   },
   {
     id: "copy",
     title: "Copy",
-    description: "Gestão de copies e scripts de vendas",
+    description: "Receba um auxílio para criar copys com IA",
     icon: FileText,
     status: "maintenance",
   },
