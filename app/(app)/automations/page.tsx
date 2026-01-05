@@ -29,9 +29,9 @@ interface Automation {
 const automations: Automation[] = [
   {
     id: "duplicate-drive",
-    title: "Duplicar Estrutura de Pasta (Drive)",
+    title: "Criar novo produto no drive",
     description:
-      "Copia uma pasta modelo no Google Drive mantendo toda a estrutura interna para novos projetos",
+      "Cria um novo produto no drive selecionando o nicho e informando os detalhes do funil",
     icon: FolderSync,
     status: "active",
     href: "/automations/duplicate-drive",

@@ -9,6 +9,13 @@ import {
 } from "@/app/_components/ui/card";
 import { Input } from "@/app/_components/ui/input";
 import { Label } from "@/app/_components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/app/_components/ui/select";
 import { toast } from "@/app/_hooks/use-toast";
 import { ChevronRight, FolderSync, Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -20,15 +27,12 @@ const WEBHOOK_URL =
 
 export default function DuplicateDriveForm() {
   const router = useRouter();
-  const [idioma, setIdioma] = useState("");
-  const [paises, setPaises] = useState("");
   const [nicho, setNicho] = useState("");
-  const [produto, setProduto] = useState("");
-  const [nomeFunil, setNomeFunil] = useState("");
+  const [funilProdutoChiclete, setFunilProdutoChiclete] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async () => {
-    if (!idioma || !paises || !nicho || !produto || !nomeFunil) {
+    if (!nicho || !funilProdutoChiclete) {
       toast({
         title: "Campos obrigatórios",
         description: "Preencha todos os campos obrigatórios.",
@@ -41,11 +45,8 @@ export default function DuplicateDriveForm() {
 
     try {
       const payload = {
-        idioma,
-        paises,
         nicho,
-        produto,
-        nomeFunil,
+        funilProdutoChiclete,
       };
 
       const response = await fetch(WEBHOOK_URL, {
@@ -94,7 +95,7 @@ export default function DuplicateDriveForm() {
         </Link>
         <ChevronRight className="h-4 w-4" />
         <span className="text-foreground font-medium">
-          Duplicar Estrutura de Pasta
+          Criar novo produto no drive
         </span>
       </nav>
 
@@ -105,10 +106,10 @@ export default function DuplicateDriveForm() {
         </div>
         <div>
           <h1 className="text-2xl font-bold tracking-tight">
-            Duplicar Estrutura de Pasta (Drive)
+            Criar novo produto no drive
           </h1>
           <p className="text-muted-foreground">
-            Crie a estrutura padronizada para um novo projeto
+            Crie um novo produto no drive selecionando o nicho e informando os detalhes do funil
           </p>
         </div>
       </div>
@@ -121,61 +122,28 @@ export default function DuplicateDriveForm() {
           <CardContent className="flex flex-col gap-6">
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
-                <Label htmlFor="idioma">Idioma</Label>
-                <Input
-                  id="idioma"
-                  placeholder="Ex: PT, EN, ES"
-                  value={idioma}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setIdioma(e.target.value)
-                  }
-                />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="paises">Países</Label>
-                <Input
-                  id="paises"
-                  placeholder="Ex: Brasil, Portugal, Espanha"
-                  value={paises}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setPaises(e.target.value)
-                  }
-                />
-              </div>
-
-              <div className="flex flex-col gap-2">
                 <Label htmlFor="nicho">Nicho</Label>
-                <Input
-                  id="nicho"
-                  placeholder="Ex: Saúde, Finanças, Relacionamentos"
-                  value={nicho}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setNicho(e.target.value)
-                  }
-                />
+                <Select value={nicho} onValueChange={setNicho}>
+                  <SelectTrigger id="nicho" className="w-full">
+                    <SelectValue placeholder="Selecione o nicho" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Diabetes">Diabetes</SelectItem>
+                    <SelectItem value="ED">ED</SelectItem>
+                    <SelectItem value="Emagrecimento">Emagrecimento</SelectItem>
+                    <SelectItem value="Memória">Memória</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="flex flex-col gap-2">
-                <Label htmlFor="produto">Produto</Label>
+                <Label htmlFor="funilProdutoChiclete">Detalhes do Funil</Label>
                 <Input
-                  id="produto"
-                  placeholder="Nome do produto"
-                  value={produto}
+                  id="funilProdutoChiclete"
+                  placeholder="Funil numero | Nome do produto | Nome Chiclete"
+                  value={funilProdutoChiclete}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setProduto(e.target.value)
-                  }
-                />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="nomeFunil">Nome Funil</Label>
-                <Input
-                  id="nomeFunil"
-                  placeholder="Nome do funil"
-                  value={nomeFunil}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setNomeFunil(e.target.value)
+                    setFunilProdutoChiclete(e.target.value)
                   }
                 />
               </div>
@@ -193,7 +161,7 @@ export default function DuplicateDriveForm() {
                     Enviando...
                   </>
                 ) : (
-                  "Criar Pasta do Drive"
+                  "Criar Produto"
                 )}
               </Button>
             </div>
