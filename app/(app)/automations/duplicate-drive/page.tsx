@@ -28,11 +28,12 @@ const WEBHOOK_URL =
 export default function DuplicateDriveForm() {
   const router = useRouter();
   const [nicho, setNicho] = useState("");
+  const [nomeProduto, setNomeProduto] = useState("");
   const [funilProdutoChiclete, setFunilProdutoChiclete] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async () => {
-    if (!nicho || !funilProdutoChiclete) {
+    if (!nicho || !nomeProduto || !funilProdutoChiclete) {
       toast({
         title: "Campos obrigatórios",
         description: "Preencha todos os campos obrigatórios.",
@@ -46,6 +47,7 @@ export default function DuplicateDriveForm() {
     try {
       const payload = {
         nicho,
+        nomeProduto,
         funilProdutoChiclete,
       };
 
@@ -109,7 +111,8 @@ export default function DuplicateDriveForm() {
             Criar novo produto no drive
           </h1>
           <p className="text-muted-foreground">
-            Crie um novo produto no drive selecionando o nicho e informando os detalhes do funil
+            Crie um novo produto no drive selecionando o nicho e informando os
+            detalhes do funil
           </p>
         </div>
       </div>
@@ -134,6 +137,18 @@ export default function DuplicateDriveForm() {
                     <SelectItem value="Memória">Memória</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="nomeProduto">Nome do Produto</Label>
+                <Input
+                  id="nomeProduto"
+                  placeholder="Nome do produto"
+                  value={nomeProduto}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setNomeProduto(e.target.value)
+                  }
+                />
               </div>
 
               <div className="flex flex-col gap-2">
